@@ -14,13 +14,13 @@
 int LED_PINS[NUM_STRIPS] = {2, 3, 4, 5, 6, 7, 8};
 
 Adafruit_NeoPixel strips[NUM_STRIPS] = {
-  Adafruit_NeoPixel(LED_COUNT, LED_PINS[0], NEO_GRB + NEO_KHZ800),
-  Adafruit_NeoPixel(LED_COUNT, LED_PINS[1], NEO_GRB + NEO_KHZ800),
-  Adafruit_NeoPixel(LED_COUNT, LED_PINS[2], NEO_GRB + NEO_KHZ800),
-  Adafruit_NeoPixel(LED_COUNT, LED_PINS[3], NEO_GRB + NEO_KHZ800),
-  Adafruit_NeoPixel(LED_COUNT, LED_PINS[4], NEO_GRB + NEO_KHZ800),
-  Adafruit_NeoPixel(LED_COUNT, LED_PINS[5], NEO_GRB + NEO_KHZ800),
-  Adafruit_NeoPixel(LED_COUNT, LED_PINS[6], NEO_GRB + NEO_KHZ800)
+  Adafruit_NeoPixel(LED_COUNTS[0], LED_PINS[0], NEO_GRB + NEO_KHZ800),
+  Adafruit_NeoPixel(LED_COUNTS[1], LED_PINS[1], NEO_GRB + NEO_KHZ800),
+  Adafruit_NeoPixel(LED_COUNTS[2], LED_PINS[2], NEO_GRB + NEO_KHZ800),
+  Adafruit_NeoPixel(LED_COUNTS[3], LED_PINS[3], NEO_GRB + NEO_KHZ800),
+  Adafruit_NeoPixel(LED_COUNTS[4], LED_PINS[4], NEO_GRB + NEO_KHZ800),
+  Adafruit_NeoPixel(LED_COUNTS[5], LED_PINS[5], NEO_GRB + NEO_KHZ800),
+  Adafruit_NeoPixel(LED_COUNTS[6], LED_PINS[6], NEO_GRB + NEO_KHZ800)
   };
 
 
@@ -53,7 +53,7 @@ void setup() {
   pinMode(YELLOW_BUTTON_PIN, INPUT_PULLUP);
   pinMode(WHITE_BUTTON_PIN, INPUT_PULLUP);
 
-  ledControl.initLEDs(strips, NUM_STRIPS, &matrix); //passes strips and clock to ledControl
+  ledControl.initLEDs(strips, NUM_STRIPS, &matrix, LED_OFFSETS); //passes strips, clock, and offsets to ledControl
 
   ledControl.resetClock();
   //strips[0].setPixelColor(25, strips[0].Color(255, 255, 255));

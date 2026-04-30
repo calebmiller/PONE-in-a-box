@@ -1,12 +1,17 @@
 #include "led.h"
 #include "config.h"
 
-void LEDSystem::initLEDs(Adafruit_NeoPixel* strs, int nStrs, Adafruit_7segment* clk){
+void LEDSystem::initLEDs(Adafruit_NeoPixel* strs, int nStrs, Adafruit_7segment* clk, const int* offsets){
 
   this->strips = strs;
   this->numStrips = nStrs;
   this->clock = clk;
   this->currentTime = 0;
+  
+  // Store LED offsets for each strip
+  for (int i = 0; i < NUM_STRIPS; i++) {
+    this->ledOffsets[i] = offsets[i];
+  }
   for (int i = 0; i < numStrips; ++i) {
     strips[i].begin();
     strips[i].show();
@@ -65,7 +70,7 @@ void LEDSystem::show() {
 }
 void LEDSystem::clear(){
   for (int i = 0; i < 7; i++) {
-    for (int j = 0; j < LED_COUNT; j++) {
+    for (int j = 0; j < strips[i].numPixels(); j++) {
       strips[i].setPixelColor(j, strips[i].Color(0, 0, 0));
     }
   strips[i].show();
@@ -133,7 +138,16 @@ void LEDSystem::setPixel(int strip, int pixel, int r, int g, int b){
   if(r>255) r=255;
   if(g>255) g=255;
   if(b>255) b=255;
-  strips[strip-2].setPixelColor(pixel, strips[strip-2].Color(r,g,b));
+  
+  int stripIndex = strip - 2;  // Convert pin ID to array index
+  int physicalPixel = pixel - ledOffsets[stripIndex];  // Apply offset
+  
+  // Bounds check: skip if physical pixel is out of range
+  if(physicalPixel < 0 || physicalPixel >= strips[stripIndex].numPixels()) {
+    return;  // Silently skip unmappable LEDs
+  }
+  
+  strips[stripIndex].setPixelColor(physicalPixel, strips[stripIndex].Color(r,g,b));
 }
 void LEDSystem::lightAll()
 {
@@ -178,7 +192,7 @@ void LEDSystem::assembly(int strip, int step){  //turn on each light in a seeque
 }
 void LEDSystem::redFlash(){
   for (int i = 0; i < 7; i++) {
-    for (int j = 0; j < LED_COUNT; j++) {
+    for (int j = 0; j < strips[i].numPixels(); j++) {
       strips[i].setPixelColor(j, PINK); //GBR
     }
   strips[i].show();

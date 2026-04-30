@@ -14,6 +14,12 @@
 #define LED_COUNT 100
 #define NUM_STRIPS 7
 
+// Per-strip LED offsets (LEDs removed from beginning)
+const int LED_OFFSETS[NUM_STRIPS] = {9, 9, 9, 9, 9, 19, 7};
+
+// Per-strip actual LED counts after shortening
+const int LED_COUNTS[NUM_STRIPS] = {91, 91, 91, 91, 91, 81, 93};
+
 //Animation Properties
 #define STEPSIZE 1
 #define LINERADIUS 15

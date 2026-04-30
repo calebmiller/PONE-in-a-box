@@ -10,7 +10,7 @@
 
 class LEDSystem {
   public:
-    void initLEDs(Adafruit_NeoPixel* strs, int nStr, Adafruit_7segment* clk);
+    void initLEDs(Adafruit_NeoPixel* strs, int nStr, Adafruit_7segment* clk, const int* offsets);
     void clear();
     void show();
     void printMap();
@@ -30,6 +30,7 @@ class LEDSystem {
     Adafruit_7segment* clock;
     int currentTime;
     int numStrips;
+    int ledOffsets[NUM_STRIPS];
     coordinate points[460];
     pixel_ID pins[460];
 
