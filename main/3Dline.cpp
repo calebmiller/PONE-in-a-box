@@ -78,21 +78,28 @@ void runTrack(LEDSystem* ledControl) {
                         pow(endPoint.y - startPoint.y, 2) +
                         pow(endPoint.z - startPoint.z, 2));
 
+	// Calculate direction vector (normalized)
+	float dx = (endPoint.x - startPoint.x) / distance;
+	float dy = (endPoint.y - startPoint.y) / distance;
+	float dz = (endPoint.z - startPoint.z) / distance;
 
 	coordinate currentCoords = {startPoint.x, startPoint.y, startPoint.z};
+	float travelDistance = 0;
 
   ledControl->resetClock();
 
-	while(distance>0-2*brightness){//Move the current point by the STEPSIZE
-    currentCoords.x += (endPoint.x > currentCoords.x) ? STEPSIZE : -STEPSIZE;
-    currentCoords.y += (endPoint.y > currentCoords.y) ? STEPSIZE : -STEPSIZE;
-    currentCoords.z += (endPoint.z > currentCoords.z) ? STEPSIZE : -STEPSIZE;
-		distance-=sqrt(3)*STEPSIZE;
-	
+	while(travelDistance <= distance + 2*brightness){//Move the current point by the STEPSIZE
+    ledControl->clear(); // Clear previous LEDs to prevent flickering
     ledControl->setVolume(currentCoords, brightness);
     ledControl->show();
     ledControl->updateClock(TIMESTEP);
 		delay(TIMESTEP);
+    
+    // Move along the direction vector
+    travelDistance += STEPSIZE;
+    currentCoords.x = startPoint.x + (int)(dx * travelDistance);
+    currentCoords.y = startPoint.y + (int)(dy * travelDistance);
+    currentCoords.z = startPoint.z + (int)(dz * travelDistance);
 	}
 
 	delay(2000);
